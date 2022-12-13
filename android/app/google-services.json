@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "284528540840",
+    "project_id": "homease-daea1",
+    "storage_bucket": "homease-daea1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:284528540840:android:b1030ad875b442a5d7969d",
+        "android_client_info": {
+          "package_name": "com.example.major_project"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "284528540840-lakjo1fgaresjrekg9kjlqvnj65b02fu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAwW-sOq0jQJSZtMsUMGJ3bVUzX98S5V3Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "284528540840-lakjo1fgaresjrekg9kjlqvnj65b02fu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
