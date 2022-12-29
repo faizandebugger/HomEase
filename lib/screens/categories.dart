@@ -15,14 +15,14 @@ class Categories extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => WorkerList(),
-          ),
-        );
-      },
+      // onTap: () {
+      //   Navigator.push(
+      //     context,
+      //     MaterialPageRoute(
+      //       builder: (context) => WorkerList(),
+      //     ),
+      //   );
+      // },
       child: Container(
         width: 170,
         height: 100,

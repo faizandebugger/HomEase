@@ -6,7 +6,20 @@ import 'package:major_project/utils/colors.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class WorkerProfile extends StatefulWidget {
-  const WorkerProfile({super.key});
+  final String name;
+  final String address;
+  final String category;
+  final int rating;
+  final int age;
+  final String image;
+  const WorkerProfile(
+      {super.key,
+      required this.name,
+      required this.address,
+      required this.category,
+      required this.rating,
+      required this.age,
+      required this.image});
 
   @override
   State<WorkerProfile> createState() => _WorkerProfileState();
@@ -47,14 +60,14 @@ class _WorkerProfileState extends State<WorkerProfile> {
                   Center(
                     child: CircleAvatar(
                       radius: 48,
-                      backgroundImage: AssetImage('images/myimage.jpeg'),
+                      backgroundImage: NetworkImage(widget.image),
                     ),
                   ),
                   SizedBox(
                     height: 15,
                   ),
                   Text(
-                    'Faizan Mansoori',
+                    widget.name,
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28),
                   ),
                   SizedBox(
@@ -64,35 +77,35 @@ class _WorkerProfileState extends State<WorkerProfile> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        'Indore',
+                        widget.address,
                         style: TextStyle(fontWeight: FontWeight.w600),
                       ),
                       SizedBox(
-                        width: 20,
+                        width: 18,
                       ),
                       Icon(
                         MdiIcons.circleSmall,
                         color: Colors.grey,
                       ),
                       SizedBox(
-                        width: 20,
+                        width: 18,
                       ),
                       Text(
-                        '2.0 ⭐',
+                        '${widget.rating}⭐',
                         style: TextStyle(fontWeight: FontWeight.w600),
                       ),
                       SizedBox(
-                        width: 20,
+                        width: 18,
                       ),
                       Icon(
                         MdiIcons.circleSmall,
                         color: Colors.grey,
                       ),
                       SizedBox(
-                        width: 20,
+                        width: 18,
                       ),
                       Text(
-                        '21 years',
+                        '${widget.age} years',
                         style: TextStyle(fontWeight: FontWeight.w600),
                       ),
                     ],
@@ -128,7 +141,7 @@ class _WorkerProfileState extends State<WorkerProfile> {
                                 height: 3,
                               ),
                               Text(
-                                'Green Park , Indore',
+                                '${widget.address}',
                                 style: TextStyle(
                                     fontWeight: FontWeight.w600, fontSize: 18),
                               ),
@@ -160,7 +173,7 @@ class _WorkerProfileState extends State<WorkerProfile> {
                                 height: 3,
                               ),
                               Text(
-                                'Carpenter',
+                                widget.category,
                                 style: TextStyle(
                                     fontWeight: FontWeight.w500, fontSize: 18),
                               ),

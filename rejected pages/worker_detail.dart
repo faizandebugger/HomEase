@@ -19,8 +19,10 @@ class WorkerDetail extends StatelessWidget {
             color: Colors.black,
           ),
           onPressed: () {
-            Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: ((context) => WorkerList())));
+            Navigator.of(context).pushReplacement(MaterialPageRoute(
+                builder: ((context) => WorkerList(
+                      category: name,
+                    ))));
           },
         ),
         actions: [

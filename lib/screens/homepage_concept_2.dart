@@ -1,13 +1,18 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, sort_child_properties_last
 
-import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:major_project/screens/WorkerList.dart';
+import 'package:major_project/screens/widgets/image_slider.dart';
+import 'package:major_project/screens/worker_list.dart';
+import 'package:major_project/user/user_profile.dart';
+
 import 'package:major_project/utils/CustomIcons.dart';
 import 'package:major_project/utils/colors.dart';
 import 'package:major_project/screens/mainCategory.dart';
-import 'package:major_project/screens/workerProfile.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+
+// String userImage = "";
 
 class HomePage2 extends StatefulWidget {
   const HomePage2({super.key});
@@ -18,56 +23,97 @@ class HomePage2 extends StatefulWidget {
 
 class _HomePage2State extends State<HomePage2> {
   final GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final user = FirebaseAuth.instance.currentUser!;
     return Scaffold(
       key: _key,
       drawer: Drawer(
+        backgroundColor: lightblue,
         child: ListView(
           children: [
-            UserAccountsDrawerHeader(
-              accountName: Text(
-                "Faizan Mansoori",
-                style: TextStyle(color: Color(0xff6f07f7)),
-              ),
-              accountEmail: Text("faizan@gmail.com",
-                  style: TextStyle(color: Color(0xff6f07f7))),
-              currentAccountPicture: CircleAvatar(
-                backgroundImage: AssetImage("images/myimage.jpeg"),
-              ),
-              decoration: BoxDecoration(
-                color: Colors.white24,
+            Container(
+              // decoration: const BoxDecoration(
+              //     gradient: LinearGradient(
+              //         colors: [Colors.blue, Colors.white],
+              //         begin: Alignment.bottomCenter,
+              //         end: Alignment.topCenter)),
+              child: UserAccountsDrawerHeader(
+                accountName: Text(
+                  "${user.email?.split('@')[0].toUpperCase()}",
+                  style: TextStyle(color: Colors.blue, fontSize: 18),
+                ),
+                accountEmail: Text("${user.email!}",
+                    style: TextStyle(color: Colors.blue, fontSize: 18)),
+                currentAccountPicture: GestureDetector(
+                  onTap: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => UserProfile()));
+                  },
+                  child: user.photoURL != null
+                      ? CircleAvatar(
+                          radius: 72,
+                          backgroundColor: Colors.grey.shade800,
+                          backgroundImage:
+                              NetworkImage((user.photoURL).toString()),
+                        )
+                      : CircleAvatar(
+                          radius: 72,
+                          backgroundColor: Colors.white,
+                          child: Icon(
+                            Icons.add_a_photo,
+                            size: 33,
+                          ),
+                        ),
+                ),
+                decoration: BoxDecoration(
+                  color: Colors.white24,
+                ),
               ),
             ),
             ListTile(
               selected: true,
               leading: Icon(
+                size: 25,
                 Icons.home,
-                color: Color(0xff6f07f7),
+                color: Colors.black,
               ),
-              title: Text("Home", style: TextStyle(color: Color(0xff6f07f7))),
+              title: Text("Home",
+                  style: TextStyle(color: Colors.black, fontSize: 15)),
             ),
             ListTile(
               leading: Icon(
+                size: 25,
                 Icons.shopping_cart,
-                color: Color(0xff6f07f7),
+                color: Colors.black,
               ),
-              title: Text("Cart", style: TextStyle(color: Color(0xff6f07f7))),
+              title: Text("Cart",
+                  style: TextStyle(color: Colors.black, fontSize: 15)),
             ),
             ListTile(
               leading: Icon(
+                size: 25,
                 Icons.info,
-                color: Color(0xff6f07f7),
+                color: Colors.black,
               ),
-              title:
-                  Text("About Us", style: TextStyle(color: Color(0xff6f07f7))),
+              title: Text("About Us",
+                  style: TextStyle(color: Colors.black, fontSize: 15)),
             ),
             ListTile(
               leading: Icon(
+                size: 25,
                 Icons.exit_to_app,
-                color: Color(0xff6f07f7),
+                color: Colors.black,
               ),
-              title: Text("Logout", style: TextStyle(color: Color(0xff6f07f7))),
+              onTap: () => FirebaseAuth.instance.signOut(),
+              title: Text("Logout",
+                  style: TextStyle(color: Colors.black, fontSize: 15)),
             ),
           ],
         ),
@@ -114,11 +160,20 @@ class _HomePage2State extends State<HomePage2> {
                           onTap: () => Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => WorkerProfile())),
-                          child: CircleAvatar(
-                            radius: 28,
-                            backgroundImage: AssetImage('images/myimage.jpeg'),
-                          ),
+                                  builder: (context) => UserProfile())),
+                          child: user.photoURL != null
+                              ? CircleAvatar(
+                                  radius: 28,
+                                  backgroundColor: Colors.grey.shade800,
+                                  backgroundImage:
+                                      NetworkImage((user.photoURL).toString()),
+                                )
+                              : CircleAvatar(
+                                  radius: 28,
+                                  backgroundColor: Colors.white,
+                                  child: Icon(Icons.add_a_photo,
+                                      size: 33, color: Colors.black),
+                                ),
                         )
                       ],
                     )
@@ -141,7 +196,7 @@ class _HomePage2State extends State<HomePage2> {
                               fontWeight: FontWeight.bold),
                         ),
                         Text(
-                          "Faizan M.",
+                          "${user.email?.split('@')[0]}",
                           style: TextStyle(
                               color: Colors.black,
                               fontSize: 30,
@@ -154,267 +209,7 @@ class _HomePage2State extends State<HomePage2> {
                 SizedBox(
                   height: 20,
                 ),
-                CarouselSlider(
-                  items: [
-                    //1st Image of Slider
-
-                    SizedBox(
-                      height: 220,
-                      child: Stack(
-                        alignment: Alignment.bottomCenter,
-                        children: [
-                          Container(
-                            height: 200,
-                            width: double.infinity,
-                            // padding: const EdgeInsets.all(8.0),
-                            child: Card(
-                              color: lightyellow,
-                              child: Padding(
-                                padding: const EdgeInsets.all(12),
-                                child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      const Text('Find affordable',
-                                          style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 25,
-                                              fontWeight: FontWeight.bold)),
-                                      const SizedBox(
-                                        height: 5,
-                                      ),
-                                      const Text('solution at home',
-                                          style: TextStyle(
-                                              letterSpacing: 2,
-                                              color: Colors.black,
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.w300)),
-                                      const SizedBox(
-                                        height: 6,
-                                      ),
-                                      ElevatedButton(
-                                        //on pressed
-                                        onPressed: () async {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    MainCategoryPage()),
-                                          );
-                                        },
-                                        //text to shoe in to the button
-                                        child: const Text('Explore now',
-                                            style:
-                                                TextStyle(color: Colors.white)),
-                                        //style section code here
-                                        style: ButtonStyle(
-                                          elevation:
-                                              MaterialStateProperty.all<double>(
-                                                  0),
-                                          shape: MaterialStateProperty.all<
-                                                  RoundedRectangleBorder>(
-                                              RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(18.0),
-                                          )),
-                                          backgroundColor:
-                                              MaterialStateProperty.all<Color>(
-                                                  Colors.black),
-                                        ),
-                                      ),
-                                    ]),
-                              ),
-                            ),
-                          ),
-                          Positioned(
-                            right: 0,
-                            top: 0,
-                            child: Image.asset(
-                              'images/homepage_girl1.png',
-                              fit: BoxFit.cover,
-                              height: 216,
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-
-                    SizedBox(
-                      height: 220,
-                      child: Stack(
-                        alignment: Alignment.bottomCenter,
-                        children: [
-                          Container(
-                            height: 200,
-                            width: double.infinity,
-                            // padding: const EdgeInsets.all(8.0),
-                            child: Card(
-                              color: lightyellow,
-                              child: Padding(
-                                padding: const EdgeInsets.all(12),
-                                child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      const Text('#1 Solution',
-                                          style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 25,
-                                              fontWeight: FontWeight.bold)),
-                                      const SizedBox(
-                                        height: 5,
-                                      ),
-                                      const Text('at home',
-                                          style: TextStyle(
-                                              letterSpacing: 2,
-                                              color: Colors.black,
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.w300)),
-                                      const SizedBox(
-                                        height: 6,
-                                      ),
-                                      ElevatedButton(
-                                        //on pressed
-                                        onPressed: () async {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    MainCategoryPage()),
-                                          );
-                                        },
-                                        //text to shoe in to the button
-                                        child: const Text('Explore now',
-                                            style:
-                                                TextStyle(color: Colors.white)),
-                                        //style section code here
-                                        style: ButtonStyle(
-                                          elevation:
-                                              MaterialStateProperty.all<double>(
-                                                  0),
-                                          shape: MaterialStateProperty.all<
-                                                  RoundedRectangleBorder>(
-                                              RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(18.0),
-                                          )),
-                                          backgroundColor:
-                                              MaterialStateProperty.all<Color>(
-                                                  Colors.black),
-                                        ),
-                                      ),
-                                    ]),
-                              ),
-                            ),
-                          ),
-                          Positioned(
-                            right: 0,
-                            top: 0,
-                            child: Image.asset(
-                              'images/homepage_girl2.png',
-                              fit: BoxFit.cover,
-                              height: 216,
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-
-                    SizedBox(
-                      height: 220,
-                      child: Stack(
-                        alignment: Alignment.bottomCenter,
-                        children: [
-                          Container(
-                            height: 200,
-                            width: double.infinity,
-                            // padding: const EdgeInsets.all(8.0),
-                            child: Card(
-                              color: lightyellow,
-                              child: Padding(
-                                padding: const EdgeInsets.all(12),
-                                child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      const Text('Trained',
-                                          style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 25,
-                                              fontWeight: FontWeight.bold)),
-                                      const SizedBox(
-                                        height: 5,
-                                      ),
-                                      const Text('Service men',
-                                          style: TextStyle(
-                                              letterSpacing: 2,
-                                              color: Colors.black,
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.w300)),
-                                      const SizedBox(
-                                        height: 6,
-                                      ),
-                                      ElevatedButton(
-                                        //on pressed
-                                        onPressed: () async {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    MainCategoryPage()),
-                                          );
-                                        },
-                                        //text to shoe in to the button
-                                        child: const Text('Explore now',
-                                            style:
-                                                TextStyle(color: Colors.white)),
-                                        //style section code here
-                                        style: ButtonStyle(
-                                          elevation:
-                                              MaterialStateProperty.all<double>(
-                                                  0),
-                                          shape: MaterialStateProperty.all<
-                                                  RoundedRectangleBorder>(
-                                              RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(18.0),
-                                          )),
-                                          backgroundColor:
-                                              MaterialStateProperty.all<Color>(
-                                                  Colors.black),
-                                        ),
-                                      ),
-                                    ]),
-                              ),
-                            ),
-                          ),
-                          Positioned(
-                            right: 0,
-                            top: 0,
-                            child: Image.asset(
-                              'images/homepage_girl3.png',
-                              fit: BoxFit.cover,
-                              height: 215,
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ],
-
-                  //Slider Container properties
-                  options: CarouselOptions(
-                    enlargeCenterPage: true,
-                    autoPlay: true,
-                    autoPlayCurve: Curves.fastOutSlowIn,
-                    enableInfiniteScroll: false,
-                    autoPlayAnimationDuration: Duration(milliseconds: 800),
-                    viewportFraction: 1,
-                  ),
-                ),
+                ImageSlider(),
                 SizedBox(
                   height: 20,
                 ),
@@ -440,7 +235,7 @@ class _HomePage2State extends State<HomePage2> {
                           context,
                           MaterialPageRoute(
                               builder: (context) =>
-                                  WorkerList(Category: 'Carpenter')),
+                                  WorkerList(category: 'Carpenter')),
                         );
                       },
                       child: Container(
@@ -472,7 +267,7 @@ class _HomePage2State extends State<HomePage2> {
                           context,
                           MaterialPageRoute(
                               builder: (context) =>
-                                  WorkerList(Category: 'Plumber')),
+                                  WorkerList(category: 'Plumber')),
                         );
                       },
                       child: Container(
@@ -512,7 +307,7 @@ class _HomePage2State extends State<HomePage2> {
                           context,
                           MaterialPageRoute(
                               builder: (context) =>
-                                  WorkerList(Category: 'Electrician')),
+                                  WorkerList(category: 'Electrician')),
                         );
                       },
                       child: Container(
@@ -582,3 +377,17 @@ class _HomePage2State extends State<HomePage2> {
     );
   }
 }
+
+// Future checkUserData() async {
+//   QuerySnapshot value = await FirebaseFirestore.instance
+//       .collection((FirebaseAuth.instance.currentUser?.uid).toString())
+//       .get();
+//   value.docs.forEach(
+//     (element) {
+//       if (element.get('userImage') != null) {
+//         userImage = element.get('userImage');
+//       }
+//       print(userImage);
+//     },
+//   );
+// }
