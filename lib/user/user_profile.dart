@@ -1,7 +1,5 @@
-import 'dart:convert';
 import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +10,6 @@ import 'package:provider/provider.dart';
 
 import '../models/user_model.dart';
 import '../screens/colors.dart';
-import 'constants.dart';
 
 ImagePicker _picker = ImagePicker();
 UserModel? userModel;
@@ -30,7 +27,7 @@ Future UploadImageToFirebase() async {
   User? user = FirebaseAuth.instance.currentUser;
   try {
     await referenceImageToUpload.putFile(File(file!.path));
-    imageUrl = await referenceImageToUpload.getDownloadURL().toString();
+    imageUrl = referenceImageToUpload.getDownloadURL().toString();
     var imgUrl = await urlRef.getDownloadURL();
     imageUrl = imgUrl;
     user?.updatePhotoURL(imageUrl);

@@ -22,7 +22,7 @@ Future update(BuildContext context) async {
       "userPhone": phoneController.text,
       "userId": user?.uid,
     });
-
+    user?.updateDisplayName(nameController.text);
     nameController.clear();
     addressController.clear();
     phoneController.clear();

@@ -3,6 +3,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:major_project/book_worker/my_services.dart';
 import 'package:major_project/screens/widgets/image_slider.dart';
 import 'package:major_project/screens/worker_list.dart';
 import 'package:major_project/user/user_profile.dart';
@@ -45,10 +46,13 @@ class _HomePage2State extends State<HomePage2> {
               //         begin: Alignment.bottomCenter,
               //         end: Alignment.topCenter)),
               child: UserAccountsDrawerHeader(
-                accountName: Text(
-                  "${user.email?.split('@')[0].toUpperCase()}",
-                  style: TextStyle(color: Colors.blue, fontSize: 18),
-                ),
+                accountName: user.displayName == ""
+                    ? Text(
+                        "${user.email?.split('@')[0].toUpperCase()}",
+                        style: TextStyle(color: Colors.blue, fontSize: 18),
+                      )
+                    : Text("${user.displayName}",
+                        style: TextStyle(color: Colors.blue, fontSize: 18)),
                 accountEmail: Text("${user.email!}",
                     style: TextStyle(color: Colors.blue, fontSize: 18)),
                 currentAccountPicture: GestureDetector(
@@ -149,9 +153,12 @@ class _HomePage2State extends State<HomePage2> {
                         CircleAvatar(
                             backgroundColor: Colors.white,
                             radius: 28,
-                            child: Icon(
-                              Icons.notifications_none_outlined,
-                              color: Colors.black,
+                            child: IconButton(
+                              onPressed: () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => MyServices())),
+                              icon: Icon(Icons.shop_2, color: Colors.black),
                             )),
                         SizedBox(
                           width: 10.0,
@@ -195,13 +202,21 @@ class _HomePage2State extends State<HomePage2> {
                               fontSize: 30,
                               fontWeight: FontWeight.bold),
                         ),
-                        Text(
-                          "${user.email?.split('@')[0]}",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 30,
-                              fontWeight: FontWeight.bold),
-                        )
+                        user.displayName == ""
+                            ? Text(
+                                "${user.email?.split('@')[0]}",
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 30,
+                                    fontWeight: FontWeight.bold),
+                              )
+                            : Text(
+                                "${user.displayName}",
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 30,
+                                    fontWeight: FontWeight.bold),
+                              )
                       ],
                     ),
                   ),

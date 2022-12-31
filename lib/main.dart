@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:major_project/providers/service_provider.dart';
 import 'package:major_project/providers/user_provider.dart';
 import 'package:major_project/providers/worker_provider.dart';
 import 'package:major_project/screens/create_worker.dart';
@@ -31,6 +32,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider<UserProvider>(
           create: (context) => UserProvider(),
+        ),
+        ChangeNotifierProvider<ServiceProvider>(
+          create: (context) => ServiceProvider(),
         ),
       ],
       child: MaterialApp(

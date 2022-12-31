@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:major_project/screens/worker_list.dart';
 
-import 'mytheme.dart';
-
 class Categories extends StatelessWidget {
   const Categories(
       {super.key,

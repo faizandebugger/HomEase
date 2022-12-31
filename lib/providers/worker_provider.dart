@@ -70,7 +70,6 @@ class WorkerProvider with ChangeNotifier {
         await FirebaseFirestore.instance.collection("Electrician").get();
 
     values.docs.forEach((element) {
-      print(element.data());
       createProduct(element);
 
       electricianList.add(workerModel);

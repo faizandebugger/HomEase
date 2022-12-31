@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:major_project/models/worker_model.dart';
 import 'package:major_project/providers/worker_provider.dart';
-import 'package:major_project/screens/mytheme.dart';
 import 'package:major_project/screens/singleProduct.dart';
 import 'package:provider/provider.dart';
 
@@ -56,10 +55,12 @@ class _WorkerListState extends State<WorkerList> {
             backgroundColor: Colors.white,
             leading: IconButton(
               icon: Icon(
-                Icons.menu,
+                Icons.arrow_back,
                 color: Colors.black,
               ),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pop(context);
+              },
             ),
             actions: <Widget>[
               IconButton(

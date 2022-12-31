@@ -1,9 +1,16 @@
 // ignore_for_file: file_names, avoid_unnecessary_containers
 
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:major_project/models/worker_model.dart';
+import 'package:major_project/providers/service_provider.dart';
 import 'package:major_project/utils/CustomIcons.dart';
 import 'package:major_project/utils/colors.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:provider/provider.dart';
 
 class WorkerProfile extends StatefulWidget {
   final String name;
@@ -26,8 +33,59 @@ class WorkerProfile extends StatefulWidget {
 }
 
 class _WorkerProfileState extends State<WorkerProfile> {
+  TextEditingController problemController = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    WorkerModel workerModel = WorkerModel(widget.name, widget.image, widget.age,
+        widget.rating, widget.address, widget.category);
+
+    ServiceProvider serviceProvider = Provider.of(context);
+
+    bookWorker() async {
+      User? user = FirebaseAuth.instance.currentUser;
+      CollectionReference _ref = FirebaseFirestore.instance
+          .collection("userServices")
+          .doc(user?.uid)
+          .collection("YourServices");
+      bool isAlreadyBooked = false;
+      QuerySnapshot snapshot = await _ref.get();
+      snapshot.docs.forEach((element) {
+        if (element.id == workerModel.workerName) {
+          isAlreadyBooked = true;
+        }
+      });
+      if (isAlreadyBooked) {
+        SnackBar snackBar = SnackBar(
+          content: Text('You have already requested this worker'),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      } else if (snapshot.docs.length > 2) {
+        SnackBar snackBar = SnackBar(
+          content: Text(
+              'You have crossed the limit of requests you can place in a day'),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      } else {
+        try {
+          serviceProvider.addServiceData(
+            workerModel: workerModel,
+            date: DateTime.now(),
+            user: FirebaseAuth.instance.currentUser,
+            problemDesc: problemController.text,
+          );
+          SnackBar snackBar = SnackBar(
+            content: Text('Your service request is successfully placed'),
+          );
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        } catch (err) {
+          SnackBar snackBar = SnackBar(
+            content: Text('$err'),
+          );
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        }
+      }
+    }
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: white,
@@ -250,7 +308,37 @@ class _WorkerProfileState extends State<WorkerProfile> {
             child: TextButton(
               child: Text('Book Now',
                   style: TextStyle(fontSize: 24, color: offwhite)),
-              onPressed: () => {},
+              onPressed: () => {
+                showDialog(
+                    context: context,
+                    builder: (_) => AlertDialog(
+                          title: Text('Enter your problem'),
+                          content: Container(
+                            height: 150,
+                            child: Column(
+                              children: [
+                                TextFormField(
+                                  controller: problemController,
+                                  decoration: const InputDecoration(
+                                    border: OutlineInputBorder(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(15)),
+                                    ),
+                                  ),
+                                ),
+                                ElevatedButton(
+                                    onPressed: () {
+                                      print("sending");
+                                      bookWorker();
+                                      Navigator.of(context, rootNavigator: true)
+                                          .pop();
+                                    },
+                                    child: Text("Confirm Book"))
+                              ],
+                            ),
+                          ),
+                        )),
+              },
             ),
           ),
         )
